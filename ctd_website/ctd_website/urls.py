@@ -21,5 +21,6 @@ from django.urls.conf import include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
+    url(r'^reset-pass/', include('django_rest_passwordreset.urls', namespace='password_reset')),
     path('', include('users.urls'))
 ]
