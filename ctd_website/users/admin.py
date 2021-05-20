@@ -4,7 +4,7 @@ from .models import (
     EventLine,
     Event,
     Order,
-    MultipleEventsOrder,
+    # MultipleEventsOrder,
 )
 
 # Register your models here.
@@ -13,4 +13,4 @@ admin.site.register(Profile)
 admin.site.register(EventLine)
 admin.site.register(Event)
 admin.site.register(Order)
-admin.site.register(MultipleEventsOrder)
+# admin.site.register(MultipleEventsOrder)
