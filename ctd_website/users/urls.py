@@ -11,4 +11,5 @@ urlpatterns = [
     path('orders/', OrdersList.as_view()),
     path('orders/<int:pk>', OrderDetail.as_view()),
     path('place_order/', PlaceOrder.as_view()),
+    path('download_csv/', exportToCSV)
 ]

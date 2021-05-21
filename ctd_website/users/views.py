@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 
 from rest_framework import generics, status, mixins
 from rest_framework.response import Response
@@ -10,6 +11,7 @@ from .serializers import *
 
 import random
 import array
+import  csv
 
 
 # Create your views here.
@@ -137,8 +139,7 @@ class PlaceOrder(APIView):
                                 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y',
                                 'Z']
 
-        symbols = ['@', '#', '$', '%', '=', ':', '?', '.', '/', '|', '~', '>',
-                   '*', '(', ')', '<']
+        symbols = ['@', '#', '$', '%', '?', '*']
 
         # combines all the character arrays above to form one array
         combined_list = digits + uppercase_characters + lowercase_characters + symbols
@@ -269,3 +270,26 @@ class PlaceOrder(APIView):
         # customer_profile.save()
         # context = {'failure_reason': transaction_details_response_data['failure_reason'],}
         # return Response(context, status=transaction_details_response_data.status)
+
+def exportToCSV(request):
+    if request.user.is_superuser:
+        event_lines = EventLine.objects.all()
+        for event_line in event_lines:
+            print(event_line)
+            events = Event.objects.filter(event_line_fk=event_line)
+            if events:
+                for event in events:
+                    with open('{}.csv'.format(event.event_name), 'w') as file:
+                        # fetch all registered users and their passwords and write
+                        # will need to use user, profile, event and order models
+                        writer = csv.writer(file)
+                        objects = Order.objects.filter(event_id_fk=event)
+                        if objects:
+                            writer.writerow(['username', 'password'])
+                            for object in objects:
+                                entry = ['{}'.format(object.user_id_fk.username), '{}'.format(object.event_password)]
+                                # print(entry)
+                                writer.writerow(entry)
+                # print(events)
+        return HttpResponse("CSVs have been created")
+    return HttpResponse("You are not allowed to perform this action")
